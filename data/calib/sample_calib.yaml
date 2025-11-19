@@ -1,0 +1,28 @@
+sensors:
+  lidar_top:
+    frame_id: lidar_top
+    extrinsics:
+      translation: [0.0, 0.0, 1.8]
+      rotation_rpy_deg: [0.0, 0.0, 0.0]
+    intrinsics:
+      min_range_m: 0.5
+      max_range_m: 120.0
+  camera_front:
+    frame_id: camera_front
+    extrinsics:
+      translation: [1.2, 0.0, 1.5]
+      rotation_rpy_deg: [0.0, 0.0, 0.0]
+    intrinsics:
+      model: pinhole
+      fx: 1200.0
+      fy: 1180.0
+      cx: 640.0
+      cy: 360.0
+  imu:
+    frame_id: imu_link
+    extrinsics:
+      translation: [0.0, 0.0, 0.0]
+      quaternion_xyzw: [0.0, 0.0, 0.0, 1.0]
+    intrinsics:
+      gyro_noise: 0.001
+      accel_noise: 0.01

@@ -1,0 +1,10 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.9, pytest-9.0.1, pluggy-1.6.0
+rootdir: /home/harish/harry_ws/hd_map_builder
+configfile: pyproject.toml
+collected 2 items
+
+tests/test_bag_reader.py .                                               [ 50%]
+tests/test_calibration.py .                                              [100%]
+
+============================== 2 passed in 0.26s ===============================
