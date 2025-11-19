@@ -111,6 +111,19 @@ python scripts/train_implicit.py \
 
 The script reports the final loss and saves a checkpoint (optional). Use the trained decoder for downstream map refinement or visualization experiments.
 
+### Simulation Validation
+
+Run a synthetic scenario that perturbs odometry/sensor noise and reports drift metrics:
+
+```bash
+python scripts/simulate_scenario.py \
+  --calibration data/calib/sample_calib.yaml \
+  --steps 30 \
+  --output logs/sim_metrics.json
+```
+
+The CLI prints RMS/max translation error, mean yaw drift, frame count, and occupied voxel stats, serving as a lightweight validation loop.
+
 ## Testing & Logs
 
 Run the full suite and persist logs (timestamped) via:
