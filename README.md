@@ -68,6 +68,22 @@ dataset = builder.build_training_dataset(samples=4096)
 
 Tie this helper into ROS bag replay or simulation feeds to demonstrate end-to-end HD map generation.
 
+### Replay CLI
+
+Run the synthetic demo end-to-end:
+
+```bash
+python -m pipeline.replay_cli \
+  --calibration data/calib/sample_calib.yaml \
+  --frames data/sample_frames.json \
+  --grid-resolution 0.5 \
+  --grid-size 20 20 4 \
+  --dataset-out logs/demo_samples.npz \
+  --samples 1024
+```
+
+This ingests `data/sample_frames.json`, optimizes the pose graph, prints a summary, and exports a neural training dataset to an `.npz`.
+
 ## Testing & Logs
 
 Run the full suite and persist logs (timestamped) via:

@@ -1,0 +1,25 @@
+{
+  "frames": [
+    {
+      "odometry": {"dx": 0.5, "dy": 0.0, "dtheta": 0.0},
+      "sensors": {
+        "lidar_top": {
+          "points": [[0.1, 0.0, 0.0]],
+          "semantics": [4]
+        },
+        "radar_front": {
+          "points": [[0.0, 0.0, 0.0]],
+          "semantics": [6]
+        }
+      }
+    },
+    {
+      "odometry": {"dx": 0.5, "dy": 0.0, "dtheta": 0.0},
+      "sensors": {
+        "lidar_top": {
+          "points": [[0.6, 0.0, 0.0]]
+        }
+      }
+    }
+  ]
+}

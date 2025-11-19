@@ -18,6 +18,13 @@ sensors:
       fy: 1180.0
       cx: 640.0
       cy: 360.0
+  radar_front:
+    frame_id: radar_front
+    extrinsics:
+      translation: [0.5, 0.0, 0.8]
+      rotation_rpy_deg: [0.0, 0.0, 0.0]
+    intrinsics:
+      range_noise: 0.1
   imu:
     frame_id: imu_link
     extrinsics:
