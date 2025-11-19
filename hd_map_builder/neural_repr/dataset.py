@@ -68,3 +68,28 @@ class OccupancySampleDataset(Dataset):
         if self.semantics is not None:
             item["semantics"] = self.semantics[idx]
         return item
+
+
+class ArrayOccupancyDataset(Dataset):
+    """Dataset sourced from numpy arrays (e.g., saved replay exports)."""
+
+    def __init__(
+        self,
+        coords: np.ndarray,
+        occupancy: np.ndarray,
+        semantics: Optional[np.ndarray] = None,
+    ):
+        self.coords = torch.as_tensor(coords, dtype=torch.float32)
+        self.occupancy = torch.as_tensor(occupancy, dtype=torch.float32)
+        self.semantics = (
+            torch.as_tensor(semantics, dtype=torch.long) if semantics is not None else None
+        )
+
+    def __len__(self) -> int:
+        return self.coords.shape[0]
+
+    def __getitem__(self, idx: int):
+        sample = {"coords": self.coords[idx], "occupancy": self.occupancy[idx]}
+        if self.semantics is not None:
+            sample["semantics"] = self.semantics[idx]
+        return sample

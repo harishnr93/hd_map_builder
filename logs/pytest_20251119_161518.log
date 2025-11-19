@@ -1,0 +1,17 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.9, pytest-9.0.1, pluggy-1.6.0
+rootdir: /home/harish/harry_ws/hd_map_builder
+configfile: pyproject.toml
+collected 14 items
+
+tests/test_bag_reader.py .                                               [  7%]
+tests/test_calibration.py ..                                             [ 21%]
+tests/test_multi_sensor_fusion.py .                                      [ 28%]
+tests/test_neural_repr.py ..                                             [ 42%]
+tests/test_occupancy_grid.py ...                                         [ 64%]
+tests/test_offline_builder.py .                                          [ 71%]
+tests/test_pipeline_cli.py .                                             [ 78%]
+tests/test_pose_graph.py ..                                              [ 92%]
+tests/test_training.py .                                                 [100%]
+
+============================== 14 passed in 6.04s ==============================

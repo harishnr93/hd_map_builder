@@ -64,12 +64,11 @@ def run_replay(
         dataset = builder.build_training_dataset(samples=samples, semantics=True)
         coords = np.stack([dataset[i]["coords"].numpy() for i in range(len(dataset))])
         occupancy = np.stack([dataset[i]["occupancy"].numpy() for i in range(len(dataset))])
-        semantics = (
-            np.stack([dataset[i]["semantics"].numpy() for i in range(len(dataset))])
-            if "semantics" in dataset[0]
-            else None
-        )
-        np.savez(dataset_path, coords=coords, occupancy=occupancy, semantics=semantics)
+        save_kwargs = {"coords": coords, "occupancy": occupancy}
+        if "semantics" in dataset[0]:
+            semantics = np.stack([dataset[i]["semantics"].numpy() for i in range(len(dataset))])
+            save_kwargs["semantics"] = semantics
+        np.savez(dataset_path, **save_kwargs)
         dataset_file = str(dataset_path)
 
     occupied = builder.occupancy_points(threshold=0.5)

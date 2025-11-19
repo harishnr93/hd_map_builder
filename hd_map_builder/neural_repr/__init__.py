@@ -6,7 +6,11 @@ TORCH_AVAILABLE = True
 
 try:
     from .implicit_map import ImplicitMapDecoder, ImplicitMapConfig
-    from .dataset import OccupancySampleDataset, OccupancySampleConfig
+    from .dataset import (
+        OccupancySampleDataset,
+        OccupancySampleConfig,
+        ArrayOccupancyDataset,
+    )
 except ModuleNotFoundError as exc:  # pragma: no cover - depends on optional torch
     if exc.name != "torch":
         raise
@@ -15,6 +19,7 @@ except ModuleNotFoundError as exc:  # pragma: no cover - depends on optional tor
     ImplicitMapConfig = None  # type: ignore
     OccupancySampleDataset = None  # type: ignore
     OccupancySampleConfig = None  # type: ignore
+    ArrayOccupancyDataset = None  # type: ignore
 
 __all__ = [
     "TORCH_AVAILABLE",
@@ -22,4 +27,5 @@ __all__ = [
     "ImplicitMapConfig",
     "OccupancySampleDataset",
     "OccupancySampleConfig",
+    "ArrayOccupancyDataset",
 ]

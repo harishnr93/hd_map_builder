@@ -84,6 +84,20 @@ python -m pipeline.replay_cli \
 
 This ingests `data/sample_frames.json`, optimizes the pose graph, prints a summary, and exports a neural training dataset to an `.npz`.
 
+### Neural Training Demo
+
+After exporting samples, train the implicit decoder:
+
+```bash
+python scripts/train_implicit.py \
+  --dataset logs/demo_samples.npz \
+  --epochs 3 \
+  --batch-size 512 \
+  --checkpoint logs/implicit_decoder.pt
+```
+
+The script reports the final loss and saves a checkpoint (optional). Use the trained decoder for downstream map refinement or visualization experiments.
+
 ## Testing & Logs
 
 Run the full suite and persist logs (timestamped) via:
