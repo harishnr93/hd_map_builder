@@ -84,6 +84,19 @@ python -m pipeline.replay_cli \
 
 This ingests `data/sample_frames.json`, optimizes the pose graph, prints a summary, and exports a neural training dataset to an `.npz`.
 
+### Export Occupancy Map
+
+Produce a quick visualization-ready point cloud (PLY) from fused occupancy cells:
+
+```bash
+python scripts/export_map.py \
+  --calibration data/calib/sample_calib.yaml \
+  --frames data/sample_frames.json \
+  --output logs/fused_map.ply
+```
+
+The resulting PLY stores XYZ (and semantic IDs when available) for inspection in CloudCompare or MeshLab.
+
 ### Neural Training Demo
 
 After exporting samples, train the implicit decoder:

@@ -104,13 +104,24 @@ class OccupancyGrid:
 
     def occupied_points(self, threshold: float = 0.5) -> np.ndarray:
         """Return world coordinates of cells exceeding probability threshold."""
+        centers, _ = self.occupied_points_with_semantics(threshold=threshold)
+        return centers
+
+    def occupied_points_with_semantics(
+        self, threshold: float = 0.5
+    ) -> Tuple[np.ndarray, Optional[np.ndarray]]:
+        """Return occupied cell centers along with semantic labels (if available)."""
         probs = self.occupancy_probabilities()
-        mask = probs >= threshold
+        mask = probs > threshold
         if not np.any(mask):
-            return np.empty((0, 3))
+            return np.empty((0, 3)), None
         idxs = np.argwhere(mask)
         centers = self.voxel_centers(idxs)
-        return centers
+        semantics = None
+        semantic_map = self.semantic_mode()
+        if semantic_map is not None:
+            semantics = semantic_map[tuple(idxs.T)]
+        return centers, semantics
 
     def voxel_centers(self, idxs: np.ndarray) -> np.ndarray:
         """Return metric centers for provided voxel indices."""

@@ -16,6 +16,10 @@ def test_integrate_hits_updates_log_odds_and_semantics():
     semantic_map = grid.semantic_mode()
     assert semantic_map[0, 0, 0] == 5
     assert semantic_map[1, 0, 0] == 6
+    centers, sem = grid.occupied_points_with_semantics(threshold=0.5)
+    assert centers.shape[0] == 2
+    assert sem is not None
+    assert set(sem.tolist()) == {5, 6}
 
 
 def test_integrate_hits_validates_semantic_length():

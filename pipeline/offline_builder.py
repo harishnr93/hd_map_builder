@@ -93,6 +93,12 @@ class OfflineMapBuilder:
         """Return occupied cell centers above a probability threshold."""
         return self.fusion.grid.occupied_points(threshold=threshold)
 
+    def occupancy_points_with_semantics(
+        self, threshold: float = 0.5
+    ) -> tuple[np.ndarray, Optional[np.ndarray]]:
+        """Return occupied points and semantic labels (if available)."""
+        return self.fusion.grid.occupied_points_with_semantics(threshold=threshold)
+
     def build_training_dataset(
         self,
         *,
