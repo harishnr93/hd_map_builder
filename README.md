@@ -38,6 +38,36 @@ hd_map_builder/
 
 Install PyTorch per your platform instructions before running the neural repr tests; the suite skips these tests if PyTorch is absent.
 
+## Integration Pipeline
+
+`pipeline/offline_builder.py` exposes an `OfflineMapBuilder` helper that:
+
+1. Loads calibration (or accepts a `CalibrationSet`) and instantiates `MultiSensorOccupancyFusion`.
+2. Maintains a pose graph (`PoseGraph`) while sequential odometry edges and sensor point clouds are ingested via `FrameSensors`.
+3. Returns fused occupied points or builds neural training datasets (requires PyTorch).
+
+Example skeleton:
+
+```python
+from pipeline.offline_builder import FrameSensors, OfflineMapBuilder
+from hd_map_builder.localization import Pose2
+from hd_map_builder.mapping import OccupancyGridConfig
+
+builder = OfflineMapBuilder.from_calibration_file(
+    "data/calib/sample_calib.yaml",
+    grid_config=OccupancyGridConfig(resolution=0.5, size=(200, 200, 10)),
+)
+
+builder.process_frame(
+    Pose2(0.5, 0.0, 0.0),
+    FrameSensors(pointclouds={"lidar_top": lidar_points}),
+)
+builder.optimize()
+dataset = builder.build_training_dataset(samples=4096)
+```
+
+Tie this helper into ROS bag replay or simulation feeds to demonstrate end-to-end HD map generation.
+
 ## Testing & Logs
 
 Run the full suite and persist logs (timestamped) via:
