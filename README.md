@@ -39,7 +39,7 @@ pip install -r requirements.txt
 scripts/run_tests.sh
 ```
 
-Pytest stdout is captured into `logs/pytest_<timestamp>.log` for later review, keeping historical runtime artifacts under version control via `.gitkeep`.
+Pytest stdout is captured into `logs/pytest_<timestamp>.log` for later review, keeping historical runtime artifacts under version control.
 
 ## Next Steps
 
