@@ -109,8 +109,12 @@ class OccupancyGrid:
         if not np.any(mask):
             return np.empty((0, 3))
         idxs = np.argwhere(mask)
-        centers = self._indices_to_points(idxs)
+        centers = self.voxel_centers(idxs)
         return centers
+
+    def voxel_centers(self, idxs: np.ndarray) -> np.ndarray:
+        """Return metric centers for provided voxel indices."""
+        return self._indices_to_points(np.asarray(idxs, dtype=int))
 
     def _points_to_indices(self, points: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         rel = (points - np.asarray(self.config.origin)) / self.config.resolution

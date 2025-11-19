@@ -26,8 +26,17 @@ hd_map_builder/
 ## Environment
 
 - Python 3.10+
-- PyTorch 2.x, NumPy, SciPy
+- PyTorch 2.x (for neural implicit stage), NumPy, SciPy
 - ROS bag parsing via `rosbags` (no ROS runtime required)
+
+## Neural Implicit Module
+
+`hd_map_builder/neural_repr` contains:
+
+- `ImplicitMapDecoder`: PyTorch MLP predicting signed distance + semantic logits from fused voxel samples.
+- `OccupancySampleDataset`: utility to turn `OccupancyGrid` volumes into random training pairs.
+
+Install PyTorch per your platform instructions before running the neural repr tests; the suite skips these tests if PyTorch is absent.
 
 ## Testing & Logs
 
@@ -43,4 +52,6 @@ Pytest stdout is captured into `logs/pytest_<timestamp>.log` for later review, k
 
 ## Next Steps
 
-Initialize Python package scaffolding, add ingestion utilities, and back them with unit tests before moving on to the mapping fusion module.
+- Wire pose-graph optimized poses + fused occupancy grids into a ROS/CARLA replay script.
+- Extend neural implicit decoder with training loop + loss notebook.
+- Add simulation scenarios and benchmarks documenting accuracy + runtime.
