@@ -20,3 +20,11 @@ def test_load_calibration_returns_expected_sensors(tmp_path: Path):
     np.testing.assert_allclose(mat[:3, 3], [0.0, 0.0, 0.0])
     np.testing.assert_allclose(mat[:3, :3], np.eye(3))
     assert imu.intrinsics_for("gyro_noise") == 0.001
+
+
+def test_extrinsics_transform_points():
+    calib = load_calibration(Path("data/calib/sample_calib.yaml"))
+    lidar = calib["lidar_top"]
+    pts = np.array([[1.0, 0.0, 0.0]])
+    transformed = lidar.extrinsics.transform_points(pts)
+    np.testing.assert_allclose(transformed, [[1.0, 0.0, 1.8]])

@@ -54,6 +54,19 @@ def _matrix_to_quaternion(matrix: np.ndarray) -> np.ndarray:
     return np.array([qx, qy, qz, qw], dtype=float)
 
 
+def _quaternion_to_matrix(quaternion: np.ndarray) -> np.ndarray:
+    """Convert XYZW quaternion to rotation matrix."""
+    x, y, z, w = quaternion
+    return np.array(
+        [
+            [1 - 2 * (y**2 + z**2), 2 * (x * y - z * w), 2 * (x * z + y * w)],
+            [2 * (x * y + z * w), 1 - 2 * (x**2 + z**2), 2 * (y * z - x * w)],
+            [2 * (x * z - y * w), 2 * (y * z + x * w), 1 - 2 * (x**2 + y**2)],
+        ],
+        dtype=float,
+    )
+
+
 @dataclass
 class Extrinsics:
     translation: np.ndarray  # xyz
@@ -63,16 +76,19 @@ class Extrinsics:
         """Return 4x4 homogeneous transform."""
         mat = np.eye(4)
         mat[:3, 3] = self.translation
-        x, y, z, w = self.quaternion
-        mat[:3, :3] = np.array(
-            [
-                [1 - 2 * (y**2 + z**2), 2 * (x * y - z * w), 2 * (x * z + y * w)],
-                [2 * (x * y + z * w), 1 - 2 * (x**2 + z**2), 2 * (y * z - x * w)],
-                [2 * (x * z - y * w), 2 * (y * z + x * w), 1 - 2 * (x**2 + y**2)],
-            ],
-            dtype=float,
-        )
+        mat[:3, :3] = self.rotation_matrix()
         return mat
+
+    def rotation_matrix(self) -> np.ndarray:
+        """3x3 rotation matrix for the extrinsics."""
+        return _quaternion_to_matrix(self.quaternion)
+
+    def transform_points(self, points: np.ndarray) -> np.ndarray:
+        """Apply extrinsics to Nx3 point cloud."""
+        pts = np.atleast_2d(points)
+        rotated = pts @ self.rotation_matrix().T
+        translated = rotated + self.translation
+        return translated if points.ndim > 1 else translated[0]
 
 
 @dataclass

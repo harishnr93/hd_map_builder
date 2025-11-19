@@ -1,0 +1,28 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.9, pytest-9.0.1, pluggy-1.6.0
+rootdir: /home/harish/harry_ws/hd_map_builder
+configfile: pyproject.toml
+collected 7 items
+
+tests/test_bag_reader.py .                                               [ 14%]
+tests/test_calibration.py ..                                             [ 42%]
+tests/test_multi_sensor_fusion.py .                                      [ 57%]
+tests/test_occupancy_grid.py ..F                                         [100%]
+
+=================================== FAILURES ===================================
+____________________ test_integrate_free_decreases_log_odds ____________________
+
+    def test_integrate_free_decreases_log_odds():
+        config = OccupancyGridConfig(resolution=1.0, size=(2, 2, 1))
+        grid = OccupancyGrid(config)
+        pts = np.array([[0.2, 0.2, 0.2]])
+        grid.integrate_hits(pts)
+        assert grid.occupancy_probabilities()[0, 0, 0] > 0.5
+        grid.integrate_free(pts)
+>       assert grid.occupancy_probabilities()[0, 0, 0] < 0.5
+E       assert np.float64(0.6106392339492219) < 0.5
+
+tests/test_occupancy_grid.py:36: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_occupancy_grid.py::test_integrate_free_decreases_log_odds
+========================= 1 failed, 6 passed in 0.19s ==========================

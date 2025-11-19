@@ -1,0 +1,26 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.9, pytest-9.0.1, pluggy-1.6.0
+rootdir: /home/harish/harry_ws/hd_map_builder
+configfile: pyproject.toml
+collected 6 items / 2 errors
+
+==================================== ERRORS ====================================
+__________________ ERROR collecting tests/test_bag_reader.py ___________________
+import file mismatch:
+imported module 'test_bag_reader' has this __file__ attribute:
+  /home/harish/harry_ws/hd_map_builder/git/hd_map_builder/tests/test_bag_reader.py
+which is not the same as the test file we want to collect:
+  /home/harish/harry_ws/hd_map_builder/tests/test_bag_reader.py
+HINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules
+__________________ ERROR collecting tests/test_calibration.py __________________
+import file mismatch:
+imported module 'test_calibration' has this __file__ attribute:
+  /home/harish/harry_ws/hd_map_builder/git/hd_map_builder/tests/test_calibration.py
+which is not the same as the test file we want to collect:
+  /home/harish/harry_ws/hd_map_builder/tests/test_calibration.py
+HINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules
+=========================== short test summary info ============================
+ERROR tests/test_bag_reader.py
+ERROR tests/test_calibration.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!!
+============================== 2 errors in 0.24s ===============================
