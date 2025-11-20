@@ -1,0 +1,38 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.9, pytest-9.0.1, pluggy-1.6.0
+rootdir: /home/harish/harry_ws/hd_map_builder
+configfile: pyproject.toml
+collected 19 items
+
+tests/test_bag_reader.py .                                               [  5%]
+tests/test_calibration.py ..                                             [ 15%]
+tests/test_export_map.py ..                                              [ 26%]
+tests/test_export_profile.py ..                                          [ 36%]
+tests/test_multi_sensor_fusion.py .                                      [ 42%]
+tests/test_neural_repr.py ..                                             [ 52%]
+tests/test_occupancy_grid.py ...                                         [ 68%]
+tests/test_offline_builder.py .                                          [ 73%]
+tests/test_pipeline_cli.py .                                             [ 78%]
+tests/test_pose_graph.py ..                                              [ 89%]
+tests/test_simulation_cli.py .                                           [ 94%]
+tests/test_training.py .                                                 [100%]
+
+=============================== warnings summary ===============================
+tests/test_export_profile.py::test_export_decoder_to_onnx
+  /home/harish/harry_ws/hd_map_builder/hd_map_builder/neural_repr/export.py:36: UserWarning: # 'dynamic_axes' is not recommended when dynamo=True, and may lead to 'torch._dynamo.exc.UserError: Constraints violated.' Supply the 'dynamic_shapes' argument instead if export is unsuccessful.
+    torch.onnx.export(
+
+tests/test_export_profile.py: 2627 warnings
+  /home/harish/harry_ws/hd_map_builder/.venv/lib/python3.13/site-packages/onnxscript/converter.py:464: DeprecationWarning: Expression.__init__ got an unexpected keyword argument 'lineno'. Support for arbitrary keyword arguments is deprecated and will be removed in Python 3.15.
+    expr = ast.Expression(expr, lineno=expr.lineno, col_offset=expr.col_offset)
+
+tests/test_export_profile.py: 2627 warnings
+  /home/harish/harry_ws/hd_map_builder/.venv/lib/python3.13/site-packages/onnxscript/converter.py:464: DeprecationWarning: Expression.__init__ got an unexpected keyword argument 'col_offset'. Support for arbitrary keyword arguments is deprecated and will be removed in Python 3.15.
+    expr = ast.Expression(expr, lineno=expr.lineno, col_offset=expr.col_offset)
+
+tests/test_export_profile.py::test_export_decoder_to_onnx
+  /home/harish/harry_ws/hd_map_builder/.venv/lib/python3.13/site-packages/torch/cuda/__init__.py:827: UserWarning: Can't initialize NVML
+    warnings.warn("Can't initialize NVML")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+====================== 19 passed, 5256 warnings in 4.99s =======================

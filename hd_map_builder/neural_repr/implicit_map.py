@@ -39,10 +39,11 @@ class ImplicitMapDecoder(nn.Module):
         coords: torch.Tensor,
         features: Optional[torch.Tensor] = None,
     ) -> dict:
-        if coords.ndim != 2 or coords.shape[-1] != self.config.coord_dim:
-            raise ValueError("coords must be of shape [N, coord_dim].")
-        if features is not None and features.shape[0] != coords.shape[0]:
-            raise ValueError("features must align with coords batch.")
+        if not torch.onnx.is_in_onnx_export():
+            if coords.ndim != 2 or coords.shape[-1] != self.config.coord_dim:
+                raise ValueError("coords must be of shape [N, coord_dim].")
+            if features is not None and features.shape[0] != coords.shape[0]:
+                raise ValueError("features must align with coords batch.")
         if features is None:
             features = torch.zeros(
                 coords.shape[0],

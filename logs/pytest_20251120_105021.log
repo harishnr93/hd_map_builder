@@ -1,0 +1,31 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.9, pytest-9.0.1, pluggy-1.6.0
+rootdir: /home/harish/harry_ws/hd_map_builder
+configfile: pyproject.toml
+collected 20 items
+
+tests/test_bag_reader.py .                                               [  5%]
+tests/test_calibration.py ..                                             [ 15%]
+tests/test_export_map.py ..                                              [ 25%]
+tests/test_export_profile.py ..                                          [ 35%]
+tests/test_localization_stream.py .                                      [ 40%]
+tests/test_multi_sensor_fusion.py .                                      [ 45%]
+tests/test_neural_repr.py ..                                             [ 55%]
+tests/test_occupancy_grid.py ...                                         [ 70%]
+tests/test_offline_builder.py .                                          [ 75%]
+tests/test_pipeline_cli.py .                                             [ 80%]
+tests/test_pose_graph.py ..                                              [ 90%]
+tests/test_simulation_cli.py .                                           [ 95%]
+tests/test_training.py .                                                 [100%]
+
+=============================== warnings summary ===============================
+tests/test_export_profile.py: 2627 warnings
+  /home/harish/harry_ws/hd_map_builder/.venv/lib/python3.13/site-packages/onnxscript/converter.py:464: DeprecationWarning: Expression.__init__ got an unexpected keyword argument 'lineno'. Support for arbitrary keyword arguments is deprecated and will be removed in Python 3.15.
+    expr = ast.Expression(expr, lineno=expr.lineno, col_offset=expr.col_offset)
+
+tests/test_export_profile.py: 2627 warnings
+  /home/harish/harry_ws/hd_map_builder/.venv/lib/python3.13/site-packages/onnxscript/converter.py:464: DeprecationWarning: Expression.__init__ got an unexpected keyword argument 'col_offset'. Support for arbitrary keyword arguments is deprecated and will be removed in Python 3.15.
+    expr = ast.Expression(expr, lineno=expr.lineno, col_offset=expr.col_offset)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+====================== 20 passed, 5254 warnings in 8.85s =======================

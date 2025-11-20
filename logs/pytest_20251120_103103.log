@@ -1,0 +1,408 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.9, pytest-9.0.1, pluggy-1.6.0
+rootdir: /home/harish/harry_ws/hd_map_builder
+configfile: pyproject.toml
+collected 19 items
+
+tests/test_bag_reader.py .                                               [  5%]
+tests/test_calibration.py ..                                             [ 15%]
+tests/test_export_map.py ..                                              [ 26%]
+tests/test_export_profile.py F.                                          [ 36%]
+tests/test_multi_sensor_fusion.py .                                      [ 42%]
+tests/test_neural_repr.py ..                                             [ 52%]
+tests/test_occupancy_grid.py ...                                         [ 68%]
+tests/test_offline_builder.py .                                          [ 73%]
+tests/test_pipeline_cli.py .                                             [ 78%]
+tests/test_pose_graph.py ..                                              [ 89%]
+tests/test_simulation_cli.py .                                           [ 94%]
+tests/test_training.py .                                                 [100%]
+
+=================================== FAILURES ===================================
+_________________________ test_export_decoder_to_onnx __________________________
+
+self = <torch.onnx._internal.exporter._capture_strategies.TorchExportNonStrictStrategy object at 0x727103158d70>
+model = ImplicitMapDecoder(
+  (backbone): Sequential(
+    (0): Linear(in_features=3, out_features=128, bias=True)
+    (1): ReL...ear(in_features=128, out_features=1, bias=True)
+  (semantic_head): Linear(in_features=128, out_features=4, bias=True)
+)
+args = (tensor([[ 0.2092,  0.9121, -0.3791],
+        [-0.6554,  0.0675,  1.4011]]),)
+kwargs = {}
+dynamic_shapes = {'coords': {0: _DimHint(type=<_DimHintType.DYNAMIC: 3>, min=None, max=None, _factory=True)}, 'sdf': {0: _DimHint(type=...x=None, _factory=True)}, 'semantics': {0: _DimHint(type=<_DimHintType.DYNAMIC: 3>, min=None, max=None, _factory=True)}}
+
+    def __call__(
+        self,
+        model: torch.nn.Module | torch.jit.ScriptFunction,
+        args: tuple[Any, ...],
+        kwargs: dict[str, Any] | None,
+        dynamic_shapes,
+    ) -> Result:
+        self._enter(model)
+        if kwargs is None:
+            kwargs = {}
+        try:
+>           exported_program = self._capture(model, args, kwargs, dynamic_shapes)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.13/site-packages/torch/onnx/_internal/exporter/_capture_strategies.py:118: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.13/site-packages/torch/onnx/_internal/exporter/_capture_strategies.py:225: in _capture
+    raise exc from None
+.venv/lib/python3.13/site-packages/torch/onnx/_internal/exporter/_capture_strategies.py:210: in _capture
+    return torch.export.export(
+.venv/lib/python3.13/site-packages/torch/export/__init__.py:311: in export
+    raise e
+.venv/lib/python3.13/site-packages/torch/export/__init__.py:277: in export
+    return _export(
+.venv/lib/python3.13/site-packages/torch/export/_trace.py:1163: in wrapper
+    raise e
+.venv/lib/python3.13/site-packages/torch/export/_trace.py:1129: in wrapper
+    ep = fn(*args, **kwargs)
+         ^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/torch/export/exported_program.py:124: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/torch/export/_trace.py:2255: in _export
+    ep = _export_for_training(
+.venv/lib/python3.13/site-packages/torch/export/_trace.py:1163: in wrapper
+    raise e
+.venv/lib/python3.13/site-packages/torch/export/_trace.py:1129: in wrapper
+    ep = fn(*args, **kwargs)
+         ^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/torch/export/exported_program.py:124: in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/torch/export/_trace.py:2071: in _export_for_training
+    export_artifact = export_func(
+.venv/lib/python3.13/site-packages/torch/export/_trace.py:1957: in _non_strict_export
+    ) = make_fake_inputs(
+.venv/lib/python3.13/site-packages/torch/_export/non_strict_utils.py:356: in make_fake_inputs
+    _check_dynamic_shapes(combined_args, dynamic_shapes)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+combined_args = {'coords': tensor([[ 0.2092,  0.9121, -0.3791],
+        [-0.6554,  0.0675,  1.4011]])}
+dynamic_shapes = {'coords': {0: _DimHint(type=<_DimHintType.DYNAMIC: 3>, min=None, max=None, _factory=True)}, 'sdf': {0: _DimHint(type=...x=None, _factory=True)}, 'semantics': {0: _DimHint(type=<_DimHintType.DYNAMIC: 3>, min=None, max=None, _factory=True)}}
+
+    def _check_dynamic_shapes(
+        combined_args: dict[str, Any],
+        dynamic_shapes: Union[dict[str, Any], tuple[Any], list[Any], None],
+    ):
+        """
+        Checks the dynamic_shapes specification for correctness,
+        using combined args + kwargs as reference for inputs structure.
+        """
+        from torch._dynamo.exc import UserError, UserErrorType
+    
+        if dynamic_shapes is None or len(dynamic_shapes) == 0:
+            return
+        if isinstance(dynamic_shapes, (tuple, list)):
+            combined_args = type(dynamic_shapes)(combined_args.values())  # type: ignore[assignment, misc]
+    
+        bounds: dict[str, tuple[int, int]] = {}
+    
+        def check_same_bounds(dim):
+            if dim.__name__ in bounds:
+                min_, max_ = bounds[dim.__name__]
+                if dim.min != min_ or dim.max != max_:
+                    this_ = Dim._readable(dim.__name__, min_, max_)
+                    that_ = Dim._readable(dim.__name__, dim.min, dim.max)
+                    raise UserError(
+                        UserErrorType.INVALID_INPUT,
+                        f"Found different definitions {this_} and {that_} "
+                        f"for the same symbolic dimension {dim}!",
+                    )
+            else:
+                bounds[dim.__name__] = (dim.min, dim.max)
+    
+        def check_symbols(path, tensor, shape):
+            if isinstance(shape, dict):
+                for i, dim in shape.items():
+                    if isinstance(dim, Dim):
+                        check_same_bounds(dim)
+                    elif dim is None:
+                        _warn_on_None_dynamic_shape_dimension()
+                    elif not (isinstance(dim, (int, _DimHint))):
+                        raise UserError(
+                            UserErrorType.INVALID_INPUT,
+                            f"Unexpected dimension mapped to index {i} in input tensor shape {shape} "
+                            f"specified at `dynamic_shapes{keystr(path)}` "
+                            f"(expected None, an int, a Dim, Dim.AUTO, Dim.STATIC, or Dim.DYNAMIC, "
+                            f" but got {dim!r} instead)",
+                            case_name="dynamic_shapes_validation",
+                        )
+            elif isinstance(shape, (tuple, list)):
+                if len(shape) != len(tensor.shape):
+                    raise UserError(
+                        UserErrorType.INVALID_INPUT,
+                        f"Expected dynamic shape spec {shape} specified at `dynamic_shapes{keystr(path)}` "
+                        f"to have the same length as the actual tensor shape {tensor.shape} "
+                        f"(expected {len(tensor.shape)}, but got {len(shape)} instead)",
+                        case_name="dynamic_shapes_validation",
+                    )
+                for i, dim in enumerate(shape):
+                    if isinstance(dim, Dim):
+                        check_same_bounds(dim)
+                    elif dim is None:
+                        _warn_on_None_dynamic_shape_dimension()
+                    elif not (isinstance(dim, (int, _DimHint))):
+                        raise UserError(
+                            UserErrorType.INVALID_INPUT,
+                            f"Unexpected dimension #{i} in input tensor shape {shape} "
+                            f"specified at `dynamic_shapes{keystr(path)}` "
+                            f"(expected None, an int, a Dim, Dim.AUTO, Dim.STATIC, or Dim.DYNAMIC, "
+                            f"but got {dim!r} instead)",
+                            case_name="dynamic_shapes_validation",
+                        )
+            elif shape is not None:
+                raise UserError(
+                    UserErrorType.INVALID_INPUT,
+                    f"Unexpected input tensor shape {shape} specified at `dynamic_shapes{keystr(path)}` "
+                    f"(expected either a list/tuple of dimensions, or a dict mapping indices to dimensions,"
+                    f" where each dimension is an int, a Dim, Dim.AUTO, Dim.STATIC, or Dim.DYNAMIC)",
+                    case_name="dynamic_shapes_validation",
+                )
+    
+        assert isinstance(dynamic_shapes, (dict, tuple, list))
+        if isinstance(dynamic_shapes, dict):
+            got_keys = list(dynamic_shapes.keys())
+            expected_arg_names = list(combined_args.keys())
+            if sorted(got_keys) != sorted(expected_arg_names):
+                msg = (
+                    f"When `dynamic_shapes` is specified as a dict, its top-level keys "
+                    f"must be the arg names {expected_arg_names} of `inputs`, but "
+                    f"here they are {got_keys}. "
+                )
+                if (
+                    len(combined_args) == 1
+                    and expected_arg_names[0] not in got_keys
+                    and isinstance(combined_args[expected_arg_names[0]], dict)
+                ):
+                    msg += (
+                        "Since here `inputs` is a list/tuple enclosing a single dict, "
+                        "maybe you just forgot to enclose `dynamic_shapes` in a list/tuple?"
+                    )
+                else:
+                    msg += (
+                        "Alternatively, you could also ignore arg names entirely "
+                        "and specify `dynamic_shapes` as a list/tuple matching `inputs`."
+                    )
+>               raise UserError(
+                    UserErrorType.INVALID_INPUT, msg, case_name="dynamic_shapes_validation"
+                )
+E               torch._dynamo.exc.UserError: When `dynamic_shapes` is specified as a dict, its top-level keys must be the arg names ['coords'] of `inputs`, but here they are ['coords', 'sdf', 'semantics']. Alternatively, you could also ignore arg names entirely and specify `dynamic_shapes` as a list/tuple matching `inputs`. For more information about this error, see: https://pytorch.org/docs/main/generated/exportdb/index.html#dynamic-shapes-validation
+E               
+E               The error above occurred when calling torch.export.export. If you would like to view some more information about this error, and get a list of all other errors that may occur in your export call, you can replace your `export()` call with `draft_export()`.
+
+.venv/lib/python3.13/site-packages/torch/export/dynamic_shapes.py:1007: UserError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-harish/pytest-9/test_export_decoder_to_onnx0')
+
+    @pytest.mark.skipif(not _onnx_available(), reason="onnxscript not installed")
+    def test_export_decoder_to_onnx(tmp_path: Path):
+        config = ImplicitMapConfig(semantic_classes=4)
+        decoder = ImplicitMapDecoder(config)
+        out_path = tmp_path / "decoder.onnx"
+>       export_decoder_to_onnx(decoder, out_path, sample_shape=(2, config.coord_dim))
+
+tests/test_export_profile.py:22: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+hd_map_builder/neural_repr/export.py:44: in export_decoder_to_onnx
+    torch.onnx.export(
+.venv/lib/python3.13/site-packages/torch/onnx/__init__.py:296: in export
+    return _compat.export_compat(
+.venv/lib/python3.13/site-packages/torch/onnx/_internal/exporter/_compat.py:143: in export_compat
+    onnx_program = _core.export(
+.venv/lib/python3.13/site-packages/torch/onnx/_internal/exporter/_flags.py:23: in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+model = ImplicitMapDecoder(
+  (backbone): Sequential(
+    (0): Linear(in_features=3, out_features=128, bias=True)
+    (1): ReL...ear(in_features=128, out_features=1, bias=True)
+  (semantic_head): Linear(in_features=128, out_features=4, bias=True)
+)
+args = (tensor([[ 0.2092,  0.9121, -0.3791],
+        [-0.6554,  0.0675,  1.4011]]),)
+kwargs = None
+
+    @_flags.set_onnx_exporting_flag
+    def export(
+        model: torch.nn.Module
+        | torch.export.ExportedProgram
+        | torch.fx.GraphModule
+        | torch.jit.ScriptModule
+        | torch.jit.ScriptFunction,
+        args: tuple[Any, ...] = (),
+        kwargs: dict[str, Any] | None = None,
+        *,
+        registry: _registration.ONNXRegistry | None = None,
+        dynamic_shapes: dict[str, Any] | tuple[Any, ...] | list[Any] | None = None,
+        input_names: Sequence[str] | None = None,
+        output_names: Sequence[str] | None = None,
+        report: bool = False,
+        verify: bool = False,
+        profile: bool = False,
+        dump_exported_program: bool = False,
+        artifacts_dir: str | os.PathLike = ".",
+        verbose: bool | None = None,
+    ) -> _onnx_program.ONNXProgram:
+        """Export a PyTorch model to ONNXProgram.
+    
+        Args:
+            model: The model to export. This can be a PyTorch nn.Module or an ExportedProgram.
+            args: The arguments to pass to the model.
+            kwargs: The keyword arguments to pass to the model.
+            registry: The registry of all ONNX decompositions.
+            dynamic_shapes: Dynamic shapes in the graph.
+            input_names: If provided, rename the inputs.
+            output_names: If provided, rename the outputs.
+            report: Whether to generate an error report if the export fails.
+            verify: Whether to verify the ONNX model after exporting.
+            profile: Whether to profile the export process. When report is True,
+                the profile result will be saved in the report. Otherwise, the profile
+                result will be printed.
+            dump_exported_program: Whether to save the exported program to a file.
+            artifacts_dir: The directory to save the exported program and error reports.
+            verbose: Whether to print verbose messages. If None (default), some messages will be printed.
+    
+        Returns:
+            The ONNXProgram with the exported IR graph.
+    
+        Raises:
+            TorchExportError: If the export process fails with torch.export.
+            ConversionError: If the ExportedProgram to ONNX translation fails.
+        """
+        # Set up the error reporting facilities
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f")
+        profiler = _maybe_start_profiler(profile)
+    
+        # Create the artifacts directory if it does not exist
+        artifacts_dir = pathlib.Path(artifacts_dir)
+        if report or profile or dump_exported_program:
+            artifacts_dir.mkdir(parents=True, exist_ok=True)
+    
+        verbose_print = _verbose_printer(verbose)
+        export_status = _reporting.ExportStatus()
+        failed_results: list[_capture_strategies.Result] = []
+    
+        program: torch.export.ExportedProgram | None = None
+        capture_strategy: str | None = None
+        # Step 1: Export the model with torch.export.export if the model is not already an ExportedProgram
+        if isinstance(model, torch.export.ExportedProgram):
+            # We know the model is already exported program, so the args, kwargs, and dynamic_shapes
+            # are not used.
+            program = model
+            # torch.export.export has strict default to False
+            export_status.torch_export_non_strict = True
+        else:
+            # Convert an nn.Module to an ExportedProgram
+            # Try everything 🐰 (all paths for getting an ExportedProgram)
+            # When input is a JIT module, the last strategy will succeed so it is handled
+            result: _capture_strategies.Result | None = None
+            for strategy_class in _capture_strategies.CAPTURE_STRATEGIES:
+                strategy = strategy_class(  # type: ignore[abstract]
+                    verbose=verbose is not False,  # Treat None as verbose
+                    dump=dump_exported_program,
+                    artifacts_dir=artifacts_dir,
+                    timestamp=timestamp,
+                )
+                result = strategy(model, args, kwargs, dynamic_shapes=dynamic_shapes)
+    
+                # Record the status
+                if strategy_class is _capture_strategies.TorchExportNonStrictStrategy:
+                    export_status.torch_export_non_strict = result.success
+                elif strategy_class is _capture_strategies.TorchExportStrictStrategy:
+                    export_status.torch_export_strict = result.success
+                elif strategy_class is _capture_strategies.TorchExportDraftExportStrategy:
+                    export_status.torch_export_draft_export = result.success
+    
+                if result.exception is not None:
+                    failed_results.append(result)
+                if result.success:
+                    assert result.exported_program is not None
+                    program = result.exported_program
+                    break
+    
+            assert result is not None
+            capture_strategy = result.strategy
+            if result.exported_program is None:
+                # If all strategies fail, produce an error report and raise the first error
+                profile_result = _maybe_stop_profiler_and_get_result(profiler)
+    
+                if report:
+                    report_path = artifacts_dir / _reporting.construct_report_file_name(
+                        timestamp, export_status
+                    )
+    
+                    try:
+                        _reporting.create_torch_export_error_report(
+                            report_path,
+                            _format_exceptions_for_all_strategies(failed_results),
+                            export_status=export_status,
+                            profile_result=profile_result,
+                        )
+                    except Exception as e_report:
+                        verbose_print(
+                            f"Failed to save error report due to an error: {e_report}"
+                        )
+                else:
+                    report_path = None
+    
+                first_error = failed_results[0].exception
+                assert first_error is not None
+    
+                # NOTE: We only throw the torch.export (first) exception because we want to
+                # focus on the torch.export.export error. Errors from other strategies like
+                # torch.jit.trace is due to the fallback and can be confusing to users.
+                # We save all errors in the error report.
+>               raise _errors.TorchExportError(
+                    _STEP_ONE_ERROR_MESSAGE
+                    + (
+                        f"\nError report has been saved to '{report_path}'."
+                        if report
+                        else ""
+                    )
+                    + _summarize_exception_stack(first_error)
+                ) from first_error
+E               torch.onnx._internal.exporter._errors.TorchExportError: Failed to export the model with torch.export. [96mThis is step 1/3[0m of exporting the model to ONNX. Next steps:
+E               - Modify the model code for `torch.export.export` to succeed. Refer to https://pytorch.org/docs/stable/generated/exportdb/index.html for more information.
+E               - Debug `torch.export.export` and submit a PR to PyTorch.
+E               - Create an issue in the PyTorch GitHub repository against the [96m*torch.export*[0m component and attach the full error stack as well as reproduction scripts.
+E               
+E               ## Exception summary
+E               
+E               <class 'torch._dynamo.exc.UserError'>: When `dynamic_shapes` is specified as a dict, its top-level keys must be the arg names ['coords'] of `inputs`, but here they are ['coords', 'sdf', 'semantics']. Alternatively, you could also ignore arg names entirely and specify `dynamic_shapes` as a list/tuple matching `inputs`. For more information about this error, see: https://pytorch.org/docs/main/generated/exportdb/index.html#dynamic-shapes-validation
+E               
+E               The error above occurred when calling torch.export.export. If you would like to view some more information about this error, and get a list of all other errors that may occur in your export call, you can replace your `export()` call with `draft_export()`.
+E               
+E               (Refer to the full stack trace above for more information.)
+
+.venv/lib/python3.13/site-packages/torch/onnx/_internal/exporter/_core.py:1385: TorchExportError
+----------------------------- Captured stdout call -----------------------------
+[torch.onnx] Obtain model graph for `ImplicitMapDecoder([...]` with `torch.export.export(..., strict=False)`...
+[torch.onnx] Obtain model graph for `ImplicitMapDecoder([...]` with `torch.export.export(..., strict=False)`... ❌
+[torch.onnx] Obtain model graph for `ImplicitMapDecoder([...]` with `torch.export.export(..., strict=True)`...
+[torch.onnx] Obtain model graph for `ImplicitMapDecoder([...]` with `torch.export.export(..., strict=True)`... ❌
+----------------------------- Captured stderr call -----------------------------
+W1120 10:31:04.831000 8310 .venv/lib/python3.13/site-packages/torch/onnx/_internal/exporter/_compat.py:114] Setting ONNX exporter to use operator set version 18 because the requested opset_version 17 is a lower version than we have implementations for. Automatic version conversion will be performed, which may not be successful at converting to the requested version. If version conversion is unsuccessful, the opset version of the exported model will be kept at 18. Please consider setting opset_version >=18 to leverage latest ONNX features
+W1120 10:31:05.138000 8310 .venv/lib/python3.13/site-packages/torch/onnx/_internal/exporter/_registration.py:107] torchvision is not installed. Skipping torchvision::nms
+=============================== warnings summary ===============================
+tests/test_export_profile.py: 2627 warnings
+  /home/harish/harry_ws/hd_map_builder/.venv/lib/python3.13/site-packages/onnxscript/converter.py:464: DeprecationWarning: Expression.__init__ got an unexpected keyword argument 'lineno'. Support for arbitrary keyword arguments is deprecated and will be removed in Python 3.15.
+    expr = ast.Expression(expr, lineno=expr.lineno, col_offset=expr.col_offset)
+
+tests/test_export_profile.py: 2627 warnings
+  /home/harish/harry_ws/hd_map_builder/.venv/lib/python3.13/site-packages/onnxscript/converter.py:464: DeprecationWarning: Expression.__init__ got an unexpected keyword argument 'col_offset'. Support for arbitrary keyword arguments is deprecated and will be removed in Python 3.15.
+    expr = ast.Expression(expr, lineno=expr.lineno, col_offset=expr.col_offset)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_export_profile.py::test_export_decoder_to_onnx - torch.onnx._internal.exporter._errors.TorchExportError: Failed to export the model with torch.export. [96mThis is step 1/3[0m of exporting the model to ONNX. Next steps:
+================= 1 failed, 18 passed, 5254 warnings in 3.49s ==================

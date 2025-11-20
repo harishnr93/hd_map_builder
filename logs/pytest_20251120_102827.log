@@ -1,0 +1,30 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.9, pytest-9.0.1, pluggy-1.6.0
+rootdir: /home/harish/harry_ws/hd_map_builder
+configfile: pyproject.toml
+collected 19 items
+
+tests/test_bag_reader.py .                                               [  5%]
+tests/test_calibration.py ..                                             [ 15%]
+tests/test_export_map.py ..                                              [ 26%]
+tests/test_export_profile.py ..                                          [ 36%]
+tests/test_multi_sensor_fusion.py .                                      [ 42%]
+tests/test_neural_repr.py ..                                             [ 52%]
+tests/test_occupancy_grid.py ...                                         [ 68%]
+tests/test_offline_builder.py .                                          [ 73%]
+tests/test_pipeline_cli.py .                                             [ 78%]
+tests/test_pose_graph.py ..                                              [ 89%]
+tests/test_simulation_cli.py .                                           [ 94%]
+tests/test_training.py .                                                 [100%]
+
+=============================== warnings summary ===============================
+tests/test_export_profile.py::test_export_decoder_to_onnx
+  /home/harish/harry_ws/hd_map_builder/hd_map_builder/neural_repr/export.py:36: DeprecationWarning: You are using the legacy TorchScript-based ONNX export. Starting in PyTorch 2.9, the new torch.export-based ONNX exporter will be the default. To switch now, set dynamo=True in torch.onnx.export. This new exporter supports features like exporting LLMs with DynamicCache. We encourage you to try it and share feedback to help improve the experience. Learn more about the new export logic: https://pytorch.org/docs/stable/onnx_dynamo.html. For exporting control flow: https://pytorch.org/tutorials/beginner/onnx/export_control_flow_model_to_onnx_tutorial.html.
+    torch.onnx.export(
+
+tests/test_export_profile.py::test_export_decoder_to_onnx
+  /home/harish/harry_ws/hd_map_builder/.venv/lib/python3.13/site-packages/torch/onnx/_internal/torchscript_exporter/utils.py:217: DeprecationWarning: The feature will be removed. Please remove usage of this function
+    setup_onnx_logging(verbose) as log_ctx,
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 19 passed, 2 warnings in 3.33s ========================

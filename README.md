@@ -84,6 +84,19 @@ python -m pipeline.replay_cli \
 
 This ingests `data/sample_frames.json`, optimizes the pose graph, prints a summary, and exports a neural training dataset to an `.npz`.
 
+### Localization Streamer
+
+Publish on-the-fly localization updates at a target rate (simulated runtime):
+
+```bash
+python scripts/stream_localization.py \
+  --calibration data/calib/sample_calib.yaml \
+  --frames data/sample_frames.json \
+  --rate 5
+```
+
+Each update prints timestamped pose JSON. Use `--realtime` to introduce sleeps between frames.
+
 ### Export Occupancy Map
 
 Produce a quick visualization-ready point cloud (PLY) from fused occupancy cells:
@@ -123,6 +136,18 @@ python scripts/simulate_scenario.py \
 ```
 
 The CLI prints RMS/max translation error, mean yaw drift, frame count, and occupied voxel stats, serving as a lightweight validation loop.
+
+### Deployment Optimization
+
+Export the implicit decoder to ONNX and profile throughput to assess deployment readiness:
+
+```bash
+pip install -r requirements.txt  # pulls in torch, onnx, onnxscript
+python scripts/export_onnx.py --output logs/implicit_decoder.onnx
+python scripts/profile_decoder.py --batch-size 4096 --steps 100
+```
+
+Use the generated ONNX artifact with TensorRT or other runtimes, and capture profiling logs to justify performance claims.
 
 ## Testing & Logs
 

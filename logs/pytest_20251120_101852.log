@@ -1,0 +1,64 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.9, pytest-9.0.1, pluggy-1.6.0
+rootdir: /home/harish/harry_ws/hd_map_builder
+configfile: pyproject.toml
+collected 19 items
+
+tests/test_bag_reader.py .                                               [  5%]
+tests/test_calibration.py ..                                             [ 15%]
+tests/test_export_map.py ..                                              [ 26%]
+tests/test_export_profile.py F.                                          [ 36%]
+tests/test_multi_sensor_fusion.py .                                      [ 42%]
+tests/test_neural_repr.py ..                                             [ 52%]
+tests/test_occupancy_grid.py ...                                         [ 68%]
+tests/test_offline_builder.py .                                          [ 73%]
+tests/test_pipeline_cli.py .                                             [ 78%]
+tests/test_pose_graph.py ..                                              [ 89%]
+tests/test_simulation_cli.py .                                           [ 94%]
+tests/test_training.py .                                                 [100%]
+
+=================================== FAILURES ===================================
+_________________________ test_export_decoder_to_onnx __________________________
+
+tmp_path = PosixPath('/tmp/pytest-of-harish/pytest-1/test_export_decoder_to_onnx0')
+
+    def test_export_decoder_to_onnx(tmp_path: Path):
+        config = ImplicitMapConfig(semantic_classes=4)
+        decoder = ImplicitMapDecoder(config)
+        out_path = tmp_path / "decoder.onnx"
+>       export_decoder_to_onnx(decoder, out_path, sample_shape=(2, config.coord_dim))
+
+tests/test_export_profile.py:15: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+hd_map_builder/neural_repr/export.py:29: in export_decoder_to_onnx
+    torch.onnx.export(
+.venv/lib/python3.13/site-packages/torch/onnx/__init__.py:282: in export
+    from torch.onnx._internal.exporter import _compat
+.venv/lib/python3.13/site-packages/torch/onnx/_internal/exporter/_compat.py:16: in <module>
+    from torch.onnx._internal.exporter import (
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    # mypy: allow-untyped-defs
+    # flake8: noqa: B950 We do not need flake8 as it complains line length
+    from __future__ import annotations
+    
+    import ctypes
+    import datetime
+    import inspect
+    import itertools
+    import logging
+    import operator
+    import pathlib
+    import textwrap
+    import traceback
+    import typing
+    from collections.abc import Mapping, Sequence
+    from typing import Any, Callable, Literal
+    
+>   import onnxscript
+E   ModuleNotFoundError: No module named 'onnxscript'
+
+.venv/lib/python3.13/site-packages/torch/onnx/_internal/exporter/_core.py:18: ModuleNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_export_profile.py::test_export_decoder_to_onnx - ModuleNotF...
+========================= 1 failed, 18 passed in 4.27s =========================
