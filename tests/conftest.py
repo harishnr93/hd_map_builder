@@ -7,6 +7,13 @@ warnings.filterwarnings(
 )
 warnings.filterwarnings(
     "ignore",
+    message="Expression.__init__ got an unexpected keyword argument 'lineno'",
+    category=DeprecationWarning,
+    module="onnxscript.converter",
+)
+warnings.filterwarnings(
+    "ignore",
+    message="Expression.__init__ got an unexpected keyword argument 'col_offset'",
     category=DeprecationWarning,
     module="onnxscript.converter",
 )

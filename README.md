@@ -97,6 +97,34 @@ python scripts/stream_localization.py \
 
 Each update prints timestamped pose JSON. Use `--realtime` to introduce sleeps between frames.
 
+#### ROS2 Node
+
+If you have ROS2 installed, launch a publisher that emits `nav_msgs/Odometry` messages:
+
+```bash
+python scripts/ros_localization_node.py \
+  --calibration data/calib/sample_calib.yaml \
+  --frames data/sample_frames.json \
+  --topic /hd_map/odometry \
+  --rate 10
+```
+
+Use `ros2 topic echo /hd_map/odometry` to inspect the output. Requires `rclpy`, `nav_msgs`, and `geometry_msgs`.
+
+#### ROS Bag Replay
+
+Feed ROS2 bag data directly into the localization pipeline (requires `rosbags`):
+
+```bash
+python scripts/replay_rosbag.py \
+  --bag /path/to/bag \
+  --calibration data/calib/sample_calib.yaml \
+  --lidar-topic /lidar_points \
+  --odom-topic /vehicle/odometry
+```
+
+The script reads bag topics, runs `LocalizationStreamer`, and prints pose JSON (or adapt the publisher).
+
 ### Export Occupancy Map
 
 Produce a quick visualization-ready point cloud (PLY) from fused occupancy cells:
@@ -145,9 +173,38 @@ Export the implicit decoder to ONNX and profile throughput to assess deployment 
 pip install -r requirements.txt  # pulls in torch, onnx, onnxscript
 python scripts/export_onnx.py --output logs/implicit_decoder.onnx
 python scripts/profile_decoder.py --batch-size 4096 --steps 100
+python scripts/ort_profile.py --model logs/implicit_decoder.onnx --batch-size 2048
 ```
 
 Use the generated ONNX artifact with TensorRT or other runtimes, and capture profiling logs to justify performance claims.
+
+## Documentation & Benchmarks
+
+- [Architecture Overview](docs/architecture.md) – component diagram and data flow.
+- [Benchmark Snapshots](docs/benchmarks.md) – current simulation/profiling metrics.
+- [Research Notes](docs/research_notes.md) – open research topics and next steps.
+- [Visualization Assets](docs/media/README.md) – instructions for generating PNG/GIF artifacts (architecture diagram, PLY screenshots, localization stream captures) for presentations. Generated files can be stored under `docs/media/`.
+- [Project Summary](docs/project_summary.md) – end-to-end feature list and detailed backlog of pending improvements (benchmark capture, ROS bag tests, visual assets, etc.).
+
+## Docker Usage
+
+Build the container (installs Python deps, rosbags, PyTorch, ONNX Runtime):
+
+```bash
+docker build -t hd-map-builder .
+```
+
+Run any of the CLI demos inside the container, e.g., localization streamer or ROS bag replay:
+
+```bash
+docker run --rm -v "$(pwd)":/app hd-map-builder \
+  python scripts/stream_localization.py --frames data/sample_frames.json
+
+docker run --rm -v "$(pwd)":/app hd-map-builder \
+  python scripts/replay_rosbag.py --bag /data/rosbag --lidar-topic /lidar_points --odom-topic /odom
+```
+
+Mount your bag/calibration paths as needed. Add `--gpus all` if you want CUDA acceleration for training/profiling commands.
 
 ## Testing & Logs
 

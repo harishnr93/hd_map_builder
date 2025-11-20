@@ -27,6 +27,8 @@ class SimulationConfig:
     sensor_noise: float = 0.05
     seed: int = 7
     landmarks: int = 8
+    trajectory: str = "straight"  # options: straight, circle, figure8
+    laps: int = 1
 
 
 def _generate_landmarks(rng: np.random.Generator, count: int) -> List[Tuple[np.ndarray, int]]:
@@ -94,8 +96,25 @@ def simulate_and_report(
     landmarks = _generate_landmarks(rng, sim_config.landmarks)
     gt_poses = [Pose2(0.0, 0.0, 0.0)]
 
-    for _ in range(sim_config.steps):
-        true_delta = Pose2(sim_config.step_dx, 0.0, sim_config.step_dtheta)
+    step_count = sim_config.steps * max(sim_config.laps, 1)
+    trajectory = sim_config.trajectory.lower()
+    for step_idx in range(step_count):
+        if trajectory == "circle":
+            angle = (2 * np.pi * step_idx) / step_count
+            true_delta = Pose2(
+                sim_config.step_dx,
+                0.0,
+                (2 * np.pi / step_count) * sim_config.laps,
+            )
+        elif trajectory == "figure8":
+            angle = (2 * np.pi * step_idx) / step_count
+            true_delta = Pose2(
+                sim_config.step_dx * np.cos(angle),
+                sim_config.step_dx * np.sin(angle),
+                sim_config.step_dtheta + 0.05 * np.sin(angle),
+            )
+        else:
+            true_delta = Pose2(sim_config.step_dx, 0.0, sim_config.step_dtheta)
         noisy_delta = Pose2(
             true_delta.x + rng.normal(scale=sim_config.odom_noise),
             true_delta.y + rng.normal(scale=sim_config.odom_noise),
@@ -148,6 +167,8 @@ def main() -> None:
     parser.add_argument("--yaw-noise", type=float, default=0.01)
     parser.add_argument("--sensor-noise", type=float, default=0.05)
     parser.add_argument("--landmarks", type=int, default=10)
+    parser.add_argument("--trajectory", type=str, default="straight", choices=["straight", "circle", "figure8"])
+    parser.add_argument("--laps", type=int, default=1)
     parser.add_argument("--seed", type=int, default=11)
     parser.add_argument("--output", type=Path, help="Optional path to save metrics JSON.")
     args = parser.parse_args()
@@ -161,6 +182,8 @@ def main() -> None:
         sensor_noise=args.sensor_noise,
         landmarks=args.landmarks,
         seed=args.seed,
+        trajectory=args.trajectory,
+        laps=args.laps,
     )
     grid_config = OccupancyGridConfig(resolution=args.grid_resolution, size=tuple(args.grid_size))
     metrics = simulate_and_report(

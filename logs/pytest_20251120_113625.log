@@ -1,0 +1,17 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.9, pytest-9.0.1, pluggy-1.5.0
+rootdir: /home/harish/harry_ws/hd_map_builder
+configfile: pyproject.toml
+collected 17 items / 7 skipped
+
+tests/test_bag_reader.py .                                               [  5%]
+tests/test_calibration.py ..                                             [ 17%]
+tests/test_export_map.py ..                                              [ 29%]
+tests/test_localization_stream.py .                                      [ 35%]
+tests/test_multi_sensor_fusion.py .                                      [ 41%]
+tests/test_occupancy_grid.py ...                                         [ 58%]
+tests/test_pose_graph.py ..                                              [ 70%]
+tests/test_replay_rosbag.py ...                                          [ 88%]
+tests/test_ros_localization_node.py ..                                   [100%]
+
+======================== 17 passed, 7 skipped in 0.44s =========================
